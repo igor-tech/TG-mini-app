@@ -11,6 +11,7 @@
     "lint": "eslint src --ext .jsx,.js,.tsx,.ts  --no-error-on-unmatched-pattern --fix && stylelint --fix src/{,*/}*.{scss,css} --allow-empty-input"
   },
   "dependencies": {
+    "@fontsource/roboto": "^5.0.8",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
