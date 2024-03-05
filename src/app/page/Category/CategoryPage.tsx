@@ -31,7 +31,9 @@ export const CategoryPage = () => {
       </Accordion.Item>
     ))
 
-  const urlBanner = categoriesGroup?.[0]?.bannerUrl
+  const urlBanner = categoriesGroup?.filter(
+    categoryGroup => categoryGroup.categoryId === +categoryId
+  )?.[0]?.bannerUrl
 
   return (
     <LayoutContent imageURL={urlBanner}>
