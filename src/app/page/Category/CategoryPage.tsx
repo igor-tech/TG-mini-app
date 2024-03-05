@@ -10,10 +10,10 @@ import { useParams } from '@tanstack/react-router'
 import styles from './CategoryPage.module.css'
 
 export const CategoryPage = () => {
-  const { categoryModels, categoriesGroup } = useStore()
+  const { categoriesGroup } = useStore()
   const { categoryid: categoryId } = useParams({ from: '/category/$categoryid' })
 
-  if (!categoryModels) {
+  if (!categoriesGroup.length) {
     return <Loader />
   }
 
@@ -31,7 +31,7 @@ export const CategoryPage = () => {
       </Accordion.Item>
     ))
 
-  const urlBanner = categoryModels?.[0]?.bannerUrl
+  const urlBanner = categoriesGroup?.[0]?.bannerUrl
 
   return (
     <LayoutContent imageURL={urlBanner}>

@@ -3,6 +3,7 @@ import { FC, useState } from 'react'
 import { useStore } from '@/app/store/store'
 import { Category } from '@/common/types/category.type'
 import { ActionIcon, Checkbox, Flex, NumberFormatter } from '@mantine/core'
+import { HapticFeedback, postEvent } from '@tma.js/sdk'
 import { CgMathMinus } from 'react-icons/cg'
 import { GoPlus } from 'react-icons/go'
 
@@ -16,6 +17,7 @@ export const TrackedModel: FC<Props> = ({ item }) => {
   const { purchasePrice, tracked, subcategory, memory } = item
   const [price, setPrice] = useState<number>(purchasePrice)
   const [checked, setChecked] = useState(tracked)
+  const haptic = new HapticFeedback('7.0', postEvent)
 
   const baseData = {
     tracked: checked,
@@ -25,11 +27,13 @@ export const TrackedModel: FC<Props> = ({ item }) => {
   }
 
   const changeTrackedValueHandler = () => {
+    haptic.impactOccurred('light')
     changeSettingsTrackedModel({ ...baseData, tracked: !checked })
     setChecked(!checked)
   }
 
   const changePurchasePriceHandler = (price: number) => {
+    haptic.impactOccurred('light')
     changeSettingsTrackedModel({ ...baseData, purchasePrice: price })
     setPrice(price)
   }

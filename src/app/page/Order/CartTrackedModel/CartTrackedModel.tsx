@@ -3,6 +3,7 @@ import { FC, useState } from 'react'
 import { useStore } from '@/app/store/store'
 import { Category } from '@/common/types/category.type'
 import { ActionIcon, Card, Divider, Flex, Group, NumberFormatter, Text } from '@mantine/core'
+import { HapticFeedback, postEvent } from '@tma.js/sdk'
 import { CgMathMinus } from 'react-icons/cg'
 import { GoPlus } from 'react-icons/go'
 import { MdDeleteOutline } from 'react-icons/md'
@@ -15,6 +16,7 @@ type Props = {
 
 export const CartTrackedModel: FC<Props> = ({ item }) => {
   const { changeSettingsTrackedModel } = useStore()
+  const haptic = new HapticFeedback('7.0', postEvent)
   const [price, setPrice] = useState<number>(item.purchasePrice)
   const [checked, setChecked] = useState(item.tracked)
 
@@ -22,6 +24,7 @@ export const CartTrackedModel: FC<Props> = ({ item }) => {
   const label = `${item.categoryName} ${item.subcategory} ${countGB}`
 
   const changeTrackedValueHandler = () => {
+    haptic.impactOccurred('heavy')
     changeSettingsTrackedModel({
       tracked: false,
       id: item.id,

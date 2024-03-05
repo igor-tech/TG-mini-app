@@ -17,7 +17,6 @@ type UpdatedTrackedModel = {
 
 type RequestServerUserData = Omit<User, 'chatId' | 'id'>
 
-// Перед отправкой должны убрать те что не tracked
 type sendUpdatedData = {
   promoCodes: number[]
   trackedModels: UpdatedTrackedModel[]
@@ -28,50 +27,53 @@ export interface IState {
   isInitialized: boolean
   authToken: string
   telegramUser: ITelegramInitDataUser
-
-  currentRegionId: number // Отправим на сервер
-  isFirstOrder: boolean // Отправим на сервер
-
-  regions: Region[]
-  categoriesGroup: CategoryGroup[] // Отправим на сервер
-  promoCodes: PromoCode[] // Отправим на сервер
-  categoryOptions: CategoryOptions[]
-  categoryModels: CategoryGroup[]
-  currentCategoryId: number
-  isDataChanged: boolean
-
   user: User
 
+  startData: string
+  regions: Region[]
+  categoriesGroup: CategoryGroup[]
+  promoCodes: PromoCode[]
+  categoryOptions: CategoryOptions[]
+  isDataChanged: boolean
+
   setAuthToken: (token: string) => void
+  setIsDataChanged: () => void
+  setOrderStatus: (isFirstOrder: boolean) => void
+  setRegion: (regionId: number) => void
+  updateUsedPromoCodes: (promoCodeId: number, isUsed: boolean) => void
+  changeSettingsTrackedModel: (data: ChangeSettingsTrackedModel) => void
+
   initializeApp: (initData: { initDataRaw: string }) => void
-  authenticatedFetch: (url: string, options?: Record<any, any>, method?: string) => Promise<any>
   initializeUser: (initDataRaw: string) => void
   getInitData: () => void
-  setRegion: (regionId: number) => void
-  setOrderStatus: (isFirstOrder: boolean) => void
-  setCurrentCategoryId: (categoryId: number) => void
-  changeSettingsTrackedModel: (data: ChangeSettingsTrackedModel) => void
+
+  authenticatedFetch: (url: string, options?: Record<any, any>, method?: string) => Promise<any>
   sendUpdatedData: () => Promise<void>
-  setIsDataChanged: (value: boolean) => void
-  updateUsedPromoCodes: (promoCodeId: number, isUsed: boolean) => void
 }
 
 export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
   ...get(),
   authToken: '',
-  currentRegionId: 0,
-  isFirstOrder: true,
   isInitialized: false,
   isDataChanged: false,
+  startData: '',
 
   setAuthToken: (token: string) => set({ authToken: `tma ${token}` }),
 
-  setIsDataChanged: value => {
+  setIsDataChanged: () => {
     try {
-      console.log('setIsDataChanged', value)
+      const categories = get().categoriesGroup
+      const promoCodes = get().promoCodes
+      const user = get().user
+
+      const startData = get().startData
+      const endData = JSON.stringify({ categories, promoCodes, user })
+      const isDataChanged = !(startData.localeCompare(endData) == 0)
+
+      console.log(isDataChanged)
       set(
         produce((state: BoundStore) => {
-          state.isDataChanged = value
+          state.isDataChanged = isDataChanged
         })
       )
     } catch (e) {
@@ -117,8 +119,6 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
       return response as ResponseType
     } catch (e) {
       console.log(e)
-
-      throw e
     }
   },
 
@@ -146,7 +146,7 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
     try {
       const userId = get().telegramUser.id
 
-      const regions = (await get().authenticatedFetch('/region')).data
+      const regions = (await get().authenticatedFetch('/region')).data as Region[]
 
       const categories = (await get().authenticatedFetch(`/category/tracked-flag/${userId}`)).data
 
@@ -156,6 +156,8 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
 
       const categoryOptions = (await get().authenticatedFetch(`/category-options`)).data
 
+      const startData = JSON.stringify({ categories, promoCodes, user })
+
       set(
         produce((state: BoundStore) => {
           state.regions = regions
@@ -163,6 +165,7 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
           state.categoriesGroup = categories
           state.promoCodes = promoCodes
           state.categoryOptions = categoryOptions
+          state.startData = startData
         })
       )
     } catch (e) {
@@ -172,7 +175,6 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
 
   setRegion: async regionId => {
     try {
-      get().setIsDataChanged(true)
       set(
         produce((state: BoundStore) => {
           state.user.region = get().regions.filter(region => region.id === regionId)[0]
@@ -180,12 +182,13 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
       )
     } catch (e) {
       console.log(e)
+    } finally {
+      get().setIsDataChanged()
     }
   },
 
   setOrderStatus: async isFirstOrder => {
     try {
-      get().setIsDataChanged(true)
       set(
         produce((state: BoundStore) => {
           state.user.isFirstOrder = isFirstOrder
@@ -193,30 +196,8 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
       )
     } catch (e) {
       console.log(e)
-    }
-  },
-
-  setCurrentCategoryId(categoryId) {
-    try {
-      set(
-        produce((state: BoundStore) => {
-          state.currentCategoryId = categoryId
-        })
-      )
-
-      const categoryModels = get().categoriesGroup.filter(
-        category => category.categoryId === categoryId
-      )
-
-      if (categoryModels) {
-        set(
-          produce((state: BoundStore) => {
-            state.categoryModels = categoryModels
-          })
-        )
-      }
-    } catch (e) {
-      console.log(e)
+    } finally {
+      get().setIsDataChanged()
     }
   },
 
@@ -237,11 +218,12 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
       set(
         produce((state: BoundStore) => {
           state.categoriesGroup = categories
-          state.isDataChanged = true
         })
       )
     } catch (e) {
       console.log(e)
+    } finally {
+      get().setIsDataChanged()
     }
   },
 
@@ -274,6 +256,12 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
       })
     } catch (e) {
       console.log(e)
+    } finally {
+      set(
+        produce((state: BoundStore) => {
+          state.isDataChanged = false
+        })
+      )
     }
   },
 
@@ -297,6 +285,8 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
       )
     } catch (e) {
       console.log(e)
+    } finally {
+      get().setIsDataChanged()
     }
   },
 })

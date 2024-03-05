@@ -20,7 +20,7 @@ export const App = () => {
 
   const miniApp = useMiniApp()
 
-  const { initializeApp, setIsDataChanged, isDataChanged } = useStore()
+  const { initializeApp, isDataChanged } = useStore()
 
   const closingBehaviour = new ClosingBehavior(true, postEvent)
 
@@ -29,13 +29,14 @@ export const App = () => {
 
     if (initDataRaw) {
       initializeApp({ initDataRaw })
-      setIsDataChanged(false)
     }
-  }, [])
+  }, [initDataRaw])
 
   useEffect(() => {
     if (isDataChanged) {
       closingBehaviour.enableConfirmation()
+    } else {
+      closingBehaviour.disableConfirmation()
     }
   }, [isDataChanged])
 
