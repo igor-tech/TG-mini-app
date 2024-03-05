@@ -23,7 +23,7 @@ export const GeneralPage = () => {
     <LayoutContent imageURL={URL_BANNERS_PAGE.GENERAL}>
       <RegionSelect />
       <FirstOrderTab />
-      <Link style={{ textDecoration: 'none' }} to={'promo'}>
+      <Link style={{ textDecoration: 'none' }} to={'/promo'}>
         <Button color={'violet'} fullWidth leftSection={<IoTicketOutline size={22} />} mt={20}>
           Промокоды
         </Button>
