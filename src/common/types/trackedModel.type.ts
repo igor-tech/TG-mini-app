@@ -6,6 +6,7 @@ export type TrackedModel = {
   category: Category
   categoryId: number
   id: number
+  pickUpInStore: boolean
   purchasePrice: number
   region: Region
   regionId: number

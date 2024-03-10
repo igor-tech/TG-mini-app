@@ -1,4 +1,5 @@
 import { useStore } from '@/app/store/store'
+import { Loader } from '@/common/components/Loader/Loader'
 import { Select } from '@mantine/core'
 
 import styles from './RegionSelect.module.css'
@@ -6,9 +7,17 @@ import styles from './RegionSelect.module.css'
 export const RegionSelect = () => {
   const { setRegion, regions, user } = useStore()
 
-  const currentRegionId = user.region.id || regions?.[0]?.id || 1
+  if (!regions.length || !user) {
+    return <Loader />
+  }
 
-  const dataSelect = regions.map(region => ({
+  const currentRegionId = user?.region?.id || regions?.[0]?.id || 1
+
+  if (!user?.region) {
+    setRegion(regions?.[0]?.id)
+  }
+
+  const dataSelect = regions?.map(region => ({
     value: region.id.toString(),
     label: region.regionName,
   }))

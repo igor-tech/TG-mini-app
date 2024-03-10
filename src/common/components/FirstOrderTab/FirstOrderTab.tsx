@@ -1,8 +1,13 @@
 import { useStore } from '@/app/store/store'
+import { Loader } from '@/common/components/Loader/Loader'
 import { SegmentedControl } from '@mantine/core'
 
 export const FirstOrderTab = () => {
   const { user, setOrderStatus } = useStore()
+
+  if (!user) {
+    return <Loader />
+  }
 
   const changeTabValueHandler = (event: null | string) => {
     if (event) {
@@ -31,7 +36,7 @@ export const FirstOrderTab = () => {
           background: 'var(--tg-theme-background-color)',
         },
       }}
-      value={user.isFirstOrder ? '0' : '1'}
+      value={user?.isFirstOrder ? '0' : '1'}
     />
   )
 }

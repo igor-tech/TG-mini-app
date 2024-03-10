@@ -3,6 +3,7 @@ export type Category = {
   categoryName: string
   id: number
   memory: number
+  pickUpInStore: boolean
   purchasePrice: number
   subcategory: string
   tracked: boolean
@@ -19,6 +20,7 @@ export type CategoryGroup = {
 export type ChangeSettingsTrackedModel = {
   categoryId: number
   id: number
+  pickUpInStore: boolean
   purchasePrice: number
   tracked: boolean
 }

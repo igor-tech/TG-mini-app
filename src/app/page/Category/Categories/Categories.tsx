@@ -10,7 +10,9 @@ export const Categories = () => {
     return <Loader />
   }
 
-  const items = categoryOptions.map((item, i) => <CategoryItem {...item} key={i} />)
+  const items = [...categoryOptions]
+    .sort((a, b) => a.order - b.order)
+    .map((item, i) => <CategoryItem {...item} key={i} />)
 
   return (
     <>

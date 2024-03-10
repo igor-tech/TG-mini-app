@@ -4,6 +4,7 @@ import { BackButton } from '@/common/components/BackButton/BackButton'
 import { SharedDivider } from '@/common/components/Divider/Divider'
 import { LayoutContent } from '@/common/components/Layout/LayoutContent/LayoutContent'
 import { Loader } from '@/common/components/Loader/Loader'
+import { PriceChangeStep } from '@/common/components/PriceChangeStep/PriceChangeStep'
 import { Accordion, Flex } from '@mantine/core'
 import { useParams } from '@tanstack/react-router'
 
@@ -38,6 +39,8 @@ export const CategoryPage = () => {
   return (
     <LayoutContent imageURL={urlBanner}>
       <BackButton />
+
+      <PriceChangeStep />
 
       <SharedDivider label={'Модели'} />
 

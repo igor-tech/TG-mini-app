@@ -1,0 +1,31 @@
+.root {
+  background: var(--tg-theme-background-color);
+  border: none;
+}
+
+.card {
+  background-color: var(--tg-theme-background-color);
+}
+
+.header {
+  position: relative;
+  height: 60px;
+  padding: var(--mantine-spacing-md);
+}
+
+.section {
+  padding: var(--mantine-spacing-md);
+}
+
+.badge {
+  min-width: fit-content;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.priceLabel {
+  font-size: 20px;
+  font-weight: 300;
+}

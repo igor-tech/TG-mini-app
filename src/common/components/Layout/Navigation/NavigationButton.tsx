@@ -1,10 +1,10 @@
 import { useStore } from '@/app/store/store'
 import { SharedButton } from '@/common/components/Button/Button'
 import { ButtonLayout } from '@/common/components/Layout/ButtonLayout/ButtonLayout'
-import { ActionIcon } from '@mantine/core'
+import { Flex } from '@mantine/core'
 import { Link } from '@tanstack/react-router'
 import { HapticFeedback, postEvent } from '@tma.js/sdk'
-import { FaCheck, FaHome } from 'react-icons/fa'
+import { FaCheck } from 'react-icons/fa'
 import { LuShoppingCart } from 'react-icons/lu'
 
 export const NavigationButton = () => {
@@ -23,29 +23,19 @@ export const NavigationButton = () => {
 
   return (
     <ButtonLayout>
-      <Link activeOptions={{ exact: true }} to={'/'}>
-        <ActionIcon
-          aria-label={'Home'}
-          color={'violet'}
-          radius={'md'}
-          size={'lg'}
-          variant={'filled'}
-        >
-          <FaHome size={22} />
-        </ActionIcon>
-      </Link>
+      <Flex gap={10} justify={'space-around'} pl={5} pr={5} w={'100%'}>
+        <Link activeOptions={{ exact: true }} style={{ textDecoration: 'none' }} to={'/order'}>
+          <SharedButton icon={LuShoppingCart}>Отслеживаемые</SharedButton>
+        </Link>
 
-      <Link activeOptions={{ exact: true }} style={{ textDecoration: 'none' }} to={'/order'}>
-        <SharedButton icon={LuShoppingCart}>Отслеживаемые</SharedButton>
-      </Link>
-
-      <SharedButton
-        color={'green'}
-        icon={FaCheck}
-        iconVariant={'right'}
-        onClick={closeMiniAppHandler}
-        text={'Применить'}
-      />
+        <SharedButton
+          color={'green'}
+          icon={FaCheck}
+          iconVariant={'right'}
+          onClick={closeMiniAppHandler}
+          text={'Применить настройки'}
+        />
+      </Flex>
     </ButtonLayout>
   )
 }

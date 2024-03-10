@@ -2,34 +2,43 @@ import { FC, useState } from 'react'
 
 import { useStore } from '@/app/store/store'
 import { Category } from '@/common/types/category.type'
-import { ActionIcon, Checkbox, Flex, NumberFormatter } from '@mantine/core'
+import { ActionIcon, Badge, Card, Divider, Flex, NumberFormatter, Text } from '@mantine/core'
 import { HapticFeedback, postEvent } from '@tma.js/sdk'
 import { CgMathMinus } from 'react-icons/cg'
+import { FaHeart, FaPeopleCarry } from 'react-icons/fa'
 import { GoPlus } from 'react-icons/go'
 
-import styles from '@/app/page/Category/CategoryPage.module.css'
+import styles from './TrackedModel.module.css'
 
 type Props = {
   item: Category
 }
 export const TrackedModel: FC<Props> = ({ item }) => {
-  const { changeSettingsTrackedModel } = useStore()
-  const { purchasePrice, tracked, subcategory, memory } = item
+  const { changeSettingsTrackedModel, priceStep } = useStore()
+  const { purchasePrice, tracked, subcategory, memory, categoryName, pickUpInStore } = item
   const [price, setPrice] = useState<number>(purchasePrice)
-  const [checked, setChecked] = useState(tracked)
+  const [isTracked, setIsTracked] = useState(tracked)
+  const [isPickup, setIsPickup] = useState(pickUpInStore)
   const haptic = new HapticFeedback('7.0', postEvent)
 
   const baseData = {
-    tracked: checked,
+    tracked: isTracked,
     id: item.id,
     categoryId: item.categoryId,
     purchasePrice: price,
+    pickUpInStore: isPickup,
+  }
+
+  const changePickUpValueHandler = () => {
+    haptic.impactOccurred('light')
+    changeSettingsTrackedModel({ ...baseData, pickUpInStore: !isPickup })
+    setIsPickup(!isPickup)
   }
 
   const changeTrackedValueHandler = () => {
     haptic.impactOccurred('light')
-    changeSettingsTrackedModel({ ...baseData, tracked: !checked })
-    setChecked(!checked)
+    changeSettingsTrackedModel({ ...baseData, tracked: !isTracked })
+    setIsTracked(!isTracked)
   }
 
   const changePurchasePriceHandler = (price: number) => {
@@ -38,42 +47,100 @@ export const TrackedModel: FC<Props> = ({ item }) => {
     setPrice(price)
   }
 
-  const countGB = memory ? `${memory}Gb` : ''
+  const additionalOptions = memory ? `${memory}Gb` : ''
 
-  const label = `${subcategory} ${countGB}`
+  const label = `${categoryName} ${subcategory}`
 
   return (
     <>
-      <Flex align={'center'} justify={'space-between'} mt={30} w={'100%'}>
-        <Checkbox
-          checked={checked}
-          classNames={{ icon: styles.checkboxIcon, input: styles.checkbox, label: styles.label }}
-          label={label}
-          onClick={changeTrackedValueHandler}
-          size={'md'}
+      <Card
+        className={styles.card}
+        radius={'md'}
+        shadow={'sm'}
+        styles={{
+          root: {
+            backgroundColor: 'var(--tg-theme-background-color)',
+            borderColor: 'var(--tg-theme-secondary-background-color)',
+            color: 'var(--tg-theme-text-color)',
+            boxShadow: 'var(--mantine-shadow-xl)',
+          },
+        }}
+        withBorder
+      >
+        <Card.Section className={styles.section}>
+          <Flex align={'center'} gap={15}>
+            <Text className={styles.label}>{label}</Text>
+            {additionalOptions && (
+              <Badge className={styles.badge} color={'blue'} variant={'gradient'}>
+                {additionalOptions}
+              </Badge>
+            )}
+          </Flex>
+        </Card.Section>
+        <Divider
+          label={'Изменить параметры отслеживания'}
+          labelPosition={'center'}
+          size={'xs'}
+          styles={{
+            label: { fontSize: '12px' },
+            root: { borderColor: 'var(--tg-theme-hint-color)' },
+          }}
         />
-
-        <Flex align={'center'} gap={15} justify={'space-between'} style={{ whiteSpace: 'nowrap' }}>
-          <ActionIcon
-            aria-label={'Settings'}
-            onClick={() => changePurchasePriceHandler(price - 500)}
-            size={20}
-            variant={'light'}
+        <Flex justify={'space-between'} mt={'xs'}>
+          <Flex
+            align={'center'}
+            gap={15}
+            justify={'space-between'}
+            style={{ whiteSpace: 'nowrap' }}
+            w={'70%'}
           >
-            <CgMathMinus />
-          </ActionIcon>
-          <NumberFormatter className={styles.label} suffix={' ₽'} thousandSeparator value={price} />
+            <ActionIcon
+              aria-label={'Settings'}
+              onClick={() => changePurchasePriceHandler(price - priceStep)}
+              size={20}
+              variant={'light'}
+            >
+              <CgMathMinus />
+            </ActionIcon>
+            <NumberFormatter
+              className={styles.priceLabel}
+              suffix={' ₽'}
+              thousandSeparator
+              value={price}
+            />
 
-          <ActionIcon
-            aria-label={'Settings'}
-            onClick={() => changePurchasePriceHandler(price + 500)}
-            size={20}
-            variant={'light'}
-          >
-            <GoPlus />
-          </ActionIcon>
+            <ActionIcon
+              aria-label={'Settings'}
+              onClick={() => changePurchasePriceHandler(price + priceStep)}
+              size={20}
+              variant={'light'}
+            >
+              <GoPlus />
+            </ActionIcon>
+          </Flex>
+
+          <ActionIcon.Group borderWidth={2}>
+            <ActionIcon
+              aria-label={'pick up in store'}
+              bg={isPickup ? '#3fbe56' : ''}
+              onClick={changePickUpValueHandler}
+              size={'md'}
+              variant={'filled'}
+            >
+              <FaPeopleCarry size={20} />
+            </ActionIcon>
+            <ActionIcon
+              aria-label={'Likes'}
+              bg={isTracked ? '#3fbe56' : ''}
+              onClick={changeTrackedValueHandler}
+              size={'md'}
+              variant={'filled'}
+            >
+              <FaHeart size={20} />
+            </ActionIcon>
+          </ActionIcon.Group>
         </Flex>
-      </Flex>
+      </Card>
     </>
   )
 }

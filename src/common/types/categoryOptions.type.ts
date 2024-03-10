@@ -3,5 +3,6 @@ export type CategoryOptions = {
   colorIcon: string
   iconName: string
   id: number
+  order: number
   title: string
 }

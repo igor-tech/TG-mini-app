@@ -17,11 +17,11 @@
   background-image: radial-gradient(
     circle at top,
     transparent 50%,
-    var(--tg-theme-background-color) 20%
+    var(--tg-theme-background-color) 60%
   );
   background-repeat: repeat-x;
   background-position: bottom;
-  background-size: 7px 3px;
+  background-size: 7px 6px;
 }
 
 .section {

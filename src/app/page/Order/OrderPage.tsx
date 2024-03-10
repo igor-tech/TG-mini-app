@@ -1,11 +1,12 @@
-import { CartTrackedModel } from '@/app/page/Order/CartTrackedModel/CartTrackedModel'
+import { TrackedModel } from '@/app/page/Category/TrackedModel/TrackedModel'
 import { useStore } from '@/app/store/store'
 import { BackButton } from '@/common/components/BackButton/BackButton'
 import { SharedDivider } from '@/common/components/Divider/Divider'
 import { LayoutContent } from '@/common/components/Layout/LayoutContent/LayoutContent'
+import { PriceChangeStep } from '@/common/components/PriceChangeStep/PriceChangeStep'
 import { URL_BANNERS_PAGE } from '@/common/config'
 import { Category } from '@/common/types/category.type'
-import { Flex } from '@mantine/core'
+import { Flex, Text } from '@mantine/core'
 
 export const OrderPage = () => {
   const { categoriesGroup } = useStore()
@@ -25,12 +26,20 @@ export const OrderPage = () => {
       <LayoutContent imageURL={URL_BANNERS_PAGE.ORDER}>
         <BackButton />
 
+        <PriceChangeStep />
+
         <SharedDivider label={'Отслеживаемые товары'} />
 
         <Flex direction={'column'} gap={15}>
           {trackedModels.map(model => {
-            return <CartTrackedModel item={model} key={model.id} />
+            return <TrackedModel item={model} key={model.id} />
           })}
+
+          {!trackedModels.length && (
+            <Text fz={16} mt={'30%'} opacity={0.6} style={{ textAlign: 'center' }}>
+              Список отслеживаемыех товаров пуст.
+            </Text>
+          )}
         </Flex>
       </LayoutContent>
     </>

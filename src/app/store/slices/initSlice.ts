@@ -11,6 +11,7 @@ import { produce } from 'immer'
 
 type UpdatedTrackedModel = {
   categoryId: number
+  pickUpInStore: boolean
   purchasePrice: number
   regionId: number
 }
@@ -28,27 +29,25 @@ export interface IState {
   authToken: string
   telegramUser: ITelegramInitDataUser
   user: User
-
+  priceStep: number
   startData: string
   regions: Region[]
   categoriesGroup: CategoryGroup[]
   promoCodes: PromoCode[]
   categoryOptions: CategoryOptions[]
   isDataChanged: boolean
-
   setAuthToken: (token: string) => void
   setIsDataChanged: () => void
   setOrderStatus: (isFirstOrder: boolean) => void
   setRegion: (regionId: number) => void
   updateUsedPromoCodes: (promoCodeId: number, isUsed: boolean) => void
   changeSettingsTrackedModel: (data: ChangeSettingsTrackedModel) => void
-
   initializeApp: (initData: { initDataRaw: string }) => void
   initializeUser: (initDataRaw: string) => void
   getInitData: () => void
-
   authenticatedFetch: (url: string, options?: Record<any, any>, method?: string) => Promise<any>
   sendUpdatedData: () => Promise<void>
+  changePriceStep: (price: number) => void
 }
 
 export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
@@ -57,6 +56,7 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
   isInitialized: false,
   isDataChanged: false,
   startData: '',
+  priceStep: 500,
 
   setAuthToken: (token: string) => set({ authToken: `tma ${token}` }),
 
@@ -145,17 +145,11 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
   getInitData: async () => {
     try {
       const userId = get().telegramUser.id
-
       const regions = (await get().authenticatedFetch('/region')).data as Region[]
-
       const categories = (await get().authenticatedFetch(`/category/tracked-flag/${userId}`)).data
-
       const user = (await get().authenticatedFetch(`/user/${userId}`)).data as User
-
       const promoCodes = (await get().authenticatedFetch(`/promo/tracked-flag/${userId}`)).data
-
       const categoryOptions = (await get().authenticatedFetch(`/category-options`)).data
-
       const startData = JSON.stringify({ categories, promoCodes, user })
 
       set(
@@ -203,13 +197,13 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
 
   changeSettingsTrackedModel(data) {
     try {
-      const { categoryId, tracked, id, purchasePrice } = data
+      const { categoryId, tracked, id, purchasePrice, pickUpInStore } = data
       const categories = get().categoriesGroup.map(category =>
         category.categoryId === categoryId
           ? {
               ...category,
               categories: category.categories.map(model =>
-                model.id === id ? { ...model, tracked, purchasePrice } : model
+                model.id === id ? { ...model, tracked, purchasePrice, pickUpInStore } : model
               ),
             }
           : category
@@ -243,6 +237,7 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
           categoryId: model.id,
           purchasePrice: model.purchasePrice,
           regionId,
+          pickUpInStore: model.pickUpInStore,
         }))
 
       const data: sendUpdatedData = { promoCodes, trackedModels, user }
@@ -287,6 +282,18 @@ export const initSlice: GenericStateCreator<BoundStore> = (set, get) => ({
       console.log(e)
     } finally {
       get().setIsDataChanged()
+    }
+  },
+
+  changePriceStep: (price: number) => {
+    try {
+      set(
+        produce((state: BoundStore) => {
+          state.priceStep = price
+        })
+      )
+    } catch (e) {
+      console.log(e)
     }
   },
 })
