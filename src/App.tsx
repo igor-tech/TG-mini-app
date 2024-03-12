@@ -20,7 +20,6 @@ declare module '@tanstack/react-router' {
 export const App = () => {
   const { initDataRaw } = init()
   const { setColorScheme } = useMantineColorScheme()
-
   const miniApp = useMiniApp()
 
   const launchParams = retrieveLaunchParams()

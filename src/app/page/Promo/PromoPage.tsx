@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { PromoCodes } from '@/app/page/Promo/PromoCodes/PromoCodes'
-import { BackButton } from '@/common/components/BackButton/BackButton'
+import { BackButtonShared } from '@/common/components/BackButton/BackButtonShared'
 import { SharedDivider } from '@/common/components/Divider/Divider'
 import { LayoutContent } from '@/common/components/Layout/LayoutContent/LayoutContent'
 import { PROMO_CODES_CONTROLLED_DATA, URL_BANNERS_PAGE } from '@/common/config'
@@ -22,7 +22,7 @@ export const PromoPage = () => {
   return (
     <>
       <LayoutContent imageURL={URL_BANNERS_PAGE.PROMO}>
-        <BackButton />
+        <BackButtonShared />
 
         <SegmentedControl
           color={'blue'}

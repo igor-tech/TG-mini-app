@@ -1,6 +1,6 @@
 import { TrackedModel } from '@/app/page/Category/TrackedModel/TrackedModel'
 import { useStore } from '@/app/store/store'
-import { BackButton } from '@/common/components/BackButton/BackButton'
+import { BackButtonShared } from '@/common/components/BackButton/BackButtonShared'
 import { SharedDivider } from '@/common/components/Divider/Divider'
 import { LayoutContent } from '@/common/components/Layout/LayoutContent/LayoutContent'
 import { Loader } from '@/common/components/Loader/Loader'
@@ -44,7 +44,7 @@ export const CategoryPage = () => {
 
   return (
     <LayoutContent imageURL={urlBanner}>
-      <BackButton />
+      <BackButtonShared />
 
       <PriceChangeStep />
 

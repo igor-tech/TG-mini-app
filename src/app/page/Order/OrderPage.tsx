@@ -1,6 +1,6 @@
 import { TrackedModel } from '@/app/page/Category/TrackedModel/TrackedModel'
 import { useStore } from '@/app/store/store'
-import { BackButton } from '@/common/components/BackButton/BackButton'
+import { BackButtonShared } from '@/common/components/BackButton/BackButtonShared'
 import { SharedDivider } from '@/common/components/Divider/Divider'
 import { LayoutContent } from '@/common/components/Layout/LayoutContent/LayoutContent'
 import { PriceChangeStep } from '@/common/components/PriceChangeStep/PriceChangeStep'
@@ -24,7 +24,7 @@ export const OrderPage = () => {
   return (
     <>
       <LayoutContent imageURL={URL_BANNERS_PAGE.ORDER}>
-        <BackButton />
+        <BackButtonShared />
 
         <PriceChangeStep />
 
