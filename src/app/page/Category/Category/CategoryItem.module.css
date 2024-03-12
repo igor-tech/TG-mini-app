@@ -13,9 +13,10 @@
   transition:
     box-shadow 150ms ease,
     transform 100ms ease;
+}
 
-  &:hover,
-  &:active {
+@media (hover: hover) {
+  .item:hover {
     transform: scale(1.05);
     background-color: var(--tg-theme-secondary-background-color);
     box-shadow: var(--mantine-shadow-md);

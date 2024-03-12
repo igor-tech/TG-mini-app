@@ -66,9 +66,10 @@
   border-radius: var(--mantine-radius-md);
 }
 
-.control:hover,
-.control:active {
-  background-color: var(--tg-theme-accent-text-color);
+@media (hover: hover) {
+  .control:hover {
+    background-color: var(--tg-theme-accent-text-color);
+  }
 }
 
 .chevron {

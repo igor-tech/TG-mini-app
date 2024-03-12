@@ -109,7 +109,6 @@ export const PromoCard: FC<Props> = ({
             radius={'md'}
             rightSection={used && <FaCheck />}
             size={'md'}
-            w={150}
           >
             Использовал
           </Button>

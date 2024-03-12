@@ -8,7 +8,7 @@ export const BackButton = () => {
   const haptic = new HapticFeedback('7.0', postEvent)
 
   const navigateHandler = () => {
-    haptic.impactOccurred('heavy')
+    haptic.impactOccurred('soft')
 
     return navigate({ to: '/' })
   }

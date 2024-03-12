@@ -15,7 +15,7 @@ export const PriceChangeStep = () => {
   const setEndValue = (value: number) => {
     const price = PRICE_STEP_SLIDER_MARKS.find(mark => +mark.value === value)!.label
 
-    haptic.impactOccurred('heavy')
+    haptic.impactOccurred('soft')
 
     changePriceStep(+price)
   }

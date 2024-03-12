@@ -22,7 +22,7 @@ export const CategoryItem: FC<Props> = ({ colorIcon, iconName, id, title }) => {
   const Icon = CATEGORIES_ICON[iconName]
 
   const navigateHandler = async () => {
-    haptic.impactOccurred('heavy')
+    haptic.impactOccurred('soft')
     await navigate({ params: { categoryid: `${id}` }, to: '/category/$categoryid' })
   }
 
