@@ -42,7 +42,6 @@
   position: relative;
   background-color: var(--tg-theme-background-color);
   border-radius: var(--mantine-radius-md);
-
   transition: transform 150ms ease;
 
   &[data-active] {
@@ -61,15 +60,14 @@
 }
 
 .control {
+  height: 4rem;
+  font-size: var(--mantine-font-size-lg);
   background-color: var(--tg-theme-background-color);
   border-radius: var(--mantine-radius-md);
-
-  .label:hover {
-    color: var(--tg-theme-secondary-background-color);
-  }
 }
 
-.control:hover {
+.control:hover,
+.control:active {
   background-color: var(--tg-theme-accent-text-color);
 }
 

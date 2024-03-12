@@ -2,8 +2,6 @@ import { useStore } from '@/app/store/store'
 import { Loader } from '@/common/components/Loader/Loader'
 import { Select } from '@mantine/core'
 
-import styles from './RegionSelect.module.css'
-
 export const RegionSelect = () => {
   const { setRegion, regions, user } = useStore()
 
@@ -32,12 +30,11 @@ export const RegionSelect = () => {
     <Select
       allowDeselect={false}
       checkIconPosition={'right'}
-      classNames={{ option: styles.option }}
       data={dataSelect}
       maxDropdownHeight={'400'}
       onChange={changeRegionHandler}
       placeholder={'Выберите ваш регион'}
-      size={'md'}
+      size={'lg'}
       styles={{
         dropdown: {
           background: 'var(--tg-theme-background-color)',

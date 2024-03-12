@@ -3,6 +3,7 @@ import { FC, useState } from 'react'
 import { useStore } from '@/app/store/store'
 import { PromoOptions } from '@/common/types/promoOptions.type'
 import { Badge, Button, Card, Flex, Group, List, Text } from '@mantine/core'
+import { HapticFeedback, postEvent } from '@tma.js/sdk'
 import { FaCheck } from 'react-icons/fa'
 import { IoTimeOutline } from 'react-icons/io5'
 
@@ -29,8 +30,10 @@ export const PromoCard: FC<Props> = ({
 }) => {
   const [used, setUsed] = useState(isUsed)
   const { updateUsedPromoCodes } = useStore()
+  const haptic = new HapticFeedback('7.0', postEvent)
 
   const onClickUsedButtonHandler = () => {
+    haptic.impactOccurred('light')
     updateUsedPromoCodes(id, !used)
     setUsed(!used)
   }
@@ -52,7 +55,7 @@ export const PromoCard: FC<Props> = ({
             {promoName}
           </Text>
 
-          <Badge color={'green'} fz={12}>
+          <Badge color={'green'} size={'lg'}>
             {isFirstOrder ? 'первого заказ' : 'повторный заказ'}
           </Badge>
         </Group>
@@ -61,7 +64,7 @@ export const PromoCard: FC<Props> = ({
       <Card.Section className={styles.section}>
         <Text c={'dimmed'} size={'sm'}>
           {promoOptions && (
-            <List>
+            <List size={'lg'}>
               {promoOptions.map((option, i) => (
                 <List.Item
                   key={i}
@@ -105,6 +108,7 @@ export const PromoCard: FC<Props> = ({
             onClick={onClickUsedButtonHandler}
             radius={'md'}
             rightSection={used && <FaCheck />}
+            size={'md'}
             w={150}
           >
             Использовал

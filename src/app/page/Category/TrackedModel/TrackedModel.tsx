@@ -97,10 +97,10 @@ export const TrackedModel: FC<Props> = ({ item }) => {
             <ActionIcon
               aria-label={'Settings'}
               onClick={() => changePurchasePriceHandler(price - priceStep)}
-              size={20}
+              size={28}
               variant={'light'}
             >
-              <CgMathMinus />
+              <CgMathMinus size={24} />
             </ActionIcon>
             <NumberFormatter
               className={styles.priceLabel}
@@ -112,10 +112,10 @@ export const TrackedModel: FC<Props> = ({ item }) => {
             <ActionIcon
               aria-label={'Settings'}
               onClick={() => changePurchasePriceHandler(price + priceStep)}
-              size={20}
+              size={28}
               variant={'light'}
             >
-              <GoPlus />
+              <GoPlus size={24} />
             </ActionIcon>
           </Flex>
 
@@ -124,19 +124,19 @@ export const TrackedModel: FC<Props> = ({ item }) => {
               aria-label={'pick up in store'}
               bg={isPickup ? '#3fbe56' : ''}
               onClick={changePickUpValueHandler}
-              size={'md'}
+              size={'lg'}
               variant={'filled'}
             >
-              <FaPeopleCarry size={20} />
+              <FaPeopleCarry size={22} />
             </ActionIcon>
             <ActionIcon
               aria-label={'Likes'}
               bg={isTracked ? '#3fbe56' : ''}
               onClick={changeTrackedValueHandler}
-              size={'md'}
+              size={'lg'}
               variant={'filled'}
             >
-              <FaHeart size={20} />
+              <FaHeart size={22} />
             </ActionIcon>
           </ActionIcon.Group>
         </Flex>

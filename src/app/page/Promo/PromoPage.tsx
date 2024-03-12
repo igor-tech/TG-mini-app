@@ -6,13 +6,16 @@ import { SharedDivider } from '@/common/components/Divider/Divider'
 import { LayoutContent } from '@/common/components/Layout/LayoutContent/LayoutContent'
 import { PROMO_CODES_CONTROLLED_DATA, URL_BANNERS_PAGE } from '@/common/config'
 import { SegmentedControl } from '@mantine/core'
+import { HapticFeedback, postEvent } from '@tma.js/sdk'
 
 export type PromoFilterTypes = 'all' | 'available' | 'used'
 
 export const PromoPage = () => {
   const [filter, setFilter] = useState<PromoFilterTypes>('all')
+  const haptic = new HapticFeedback('7.0', postEvent)
 
   const changeControllerValue = (event: string) => {
+    haptic.impactOccurred('rigid')
     setFilter(event as PromoFilterTypes)
   }
 
@@ -28,7 +31,7 @@ export const PromoPage = () => {
           fullWidth
           mt={20}
           onChange={changeControllerValue}
-          size={'md'}
+          size={'lg'}
           styles={{
             indicator: {
               background: 'var(--tg-theme-secondary-background-color)',

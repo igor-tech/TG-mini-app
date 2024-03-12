@@ -1,9 +1,11 @@
 import { useStore } from '@/app/store/store'
 import { Loader } from '@/common/components/Loader/Loader'
 import { SegmentedControl } from '@mantine/core'
+import { HapticFeedback, postEvent } from '@tma.js/sdk'
 
 export const FirstOrderTab = () => {
   const { user, setOrderStatus } = useStore()
+  const haptic = new HapticFeedback('7.0', postEvent)
 
   if (!user) {
     return <Loader />
@@ -11,6 +13,7 @@ export const FirstOrderTab = () => {
 
   const changeTabValueHandler = (event: null | string) => {
     if (event) {
+      haptic.impactOccurred('rigid')
       setOrderStatus(event === '0')
     }
   }
@@ -24,7 +27,7 @@ export const FirstOrderTab = () => {
       fullWidth
       mt={20}
       onChange={changeTabValueHandler}
-      size={'md'}
+      size={'lg'}
       styles={{
         indicator: {
           background: 'var(--tg-theme-secondary-background-color)',

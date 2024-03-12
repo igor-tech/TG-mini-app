@@ -8,12 +8,14 @@ import { RegionSelect } from '@/common/components/RegionSelect/RegionSelect'
 import { URL_BANNERS_PAGE } from '@/common/config'
 import { Button } from '@mantine/core'
 import { Link } from '@tanstack/react-router'
+import { HapticFeedback, postEvent } from '@tma.js/sdk'
 import { IoTicketOutline } from 'react-icons/io5'
 
 import '@mantine/core/styles.css'
 
 export const GeneralPage = () => {
   const { isInitialized } = useStore()
+  const haptic = new HapticFeedback('7.0', postEvent)
 
   if (!isInitialized) {
     return <Loader />
@@ -23,8 +25,18 @@ export const GeneralPage = () => {
     <LayoutContent imageURL={URL_BANNERS_PAGE.GENERAL}>
       <RegionSelect />
       <FirstOrderTab />
-      <Link style={{ textDecoration: 'none' }} to={'/promo'}>
-        <Button color={'violet'} fullWidth leftSection={<IoTicketOutline size={22} />} mt={20}>
+      <Link
+        onClick={() => haptic.impactOccurred('heavy')}
+        style={{ textDecoration: 'none' }}
+        to={'/promo'}
+      >
+        <Button
+          color={'violet'}
+          fullWidth
+          leftSection={<IoTicketOutline size={22} />}
+          mt={20}
+          size={'md'}
+        >
           Промокоды
         </Button>
       </Link>

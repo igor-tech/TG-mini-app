@@ -24,7 +24,12 @@ export const NavigationButton = () => {
   return (
     <ButtonLayout>
       <Flex gap={10} justify={'space-around'} pl={5} pr={5} w={'100%'}>
-        <Link activeOptions={{ exact: true }} style={{ textDecoration: 'none' }} to={'/order'}>
+        <Link
+          activeOptions={{ exact: true }}
+          onClick={() => haptic.impactOccurred('heavy')}
+          style={{ textDecoration: 'none' }}
+          to={'/order'}
+        >
           <SharedButton icon={LuShoppingCart}>Отслеживаемые</SharedButton>
         </Link>
 
@@ -33,7 +38,7 @@ export const NavigationButton = () => {
           icon={FaCheck}
           iconVariant={'right'}
           onClick={closeMiniAppHandler}
-          text={'Применить настройки'}
+          text={'Применить'}
         />
       </Flex>
     </ButtonLayout>

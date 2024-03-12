@@ -7,12 +7,14 @@ import { Loader } from '@/common/components/Loader/Loader'
 import { PriceChangeStep } from '@/common/components/PriceChangeStep/PriceChangeStep'
 import { Accordion, Flex } from '@mantine/core'
 import { useParams } from '@tanstack/react-router'
+import { HapticFeedback, postEvent } from '@tma.js/sdk'
 
 import styles from './CategoryPage.module.css'
 
 export const CategoryPage = () => {
   const { categoriesGroup } = useStore()
   const { categoryid: categoryId } = useParams({ from: '/category/$categoryid' })
+  const haptic = new HapticFeedback('7.0', postEvent)
 
   if (!categoriesGroup.length) {
     return <Loader />
@@ -21,7 +23,11 @@ export const CategoryPage = () => {
   const items = categoriesGroup
     .filter(categoryGroup => categoryGroup.categoryId === +categoryId)
     .map(item => (
-      <Accordion.Item key={item.subcategory} value={item.subcategory}>
+      <Accordion.Item
+        key={item.subcategory}
+        onClick={() => haptic.impactOccurred('soft')}
+        value={item.subcategory}
+      >
         <Accordion.Control>{`${item.categoryName} ${item.subcategory}`}</Accordion.Control>
 
         {item.categories.map(models => (

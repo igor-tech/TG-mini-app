@@ -15,6 +15,8 @@ export const PriceChangeStep = () => {
   const setEndValue = (value: number) => {
     const price = PRICE_STEP_SLIDER_MARKS.find(mark => +mark.value === value)!.label
 
+    haptic.impactOccurred('heavy')
+
     changePriceStep(+price)
   }
 
@@ -25,17 +27,22 @@ export const PriceChangeStep = () => {
         classNames={styles}
         defaultValue={defaultValue}
         label={val => PRICE_STEP_SLIDER_MARKS.find(mark => mark.value === val)!.label}
-        labelTransitionProps={{
-          transition: 'skew-down',
-          duration: 150,
-          timingFunction: 'linear',
-        }}
         marks={PRICE_STEP_SLIDER_MARKS}
         mb={15}
         mt={10}
         onChange={() => haptic.selectionChanged()}
         onChangeEnd={setEndValue}
         step={25}
+        styles={{
+          thumb: {
+            width: '24px',
+            height: '20px',
+            backgroundColor: 'var(--mantine-color-white)',
+            border: '1px solid var(--mantine-color-gray-3)',
+            color: 'var(--mantine-color-gray-5)',
+            borderRadius: 'var(--mantine-radius-sm)',
+          },
+        }}
         thumbChildren={<TbGripHorizontal />}
       />
     </Box>

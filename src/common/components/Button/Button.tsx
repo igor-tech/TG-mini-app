@@ -33,6 +33,7 @@ export const SharedButton: FC<Props> = ({
       onClick={onClick}
       radius={'sm'}
       rightSection={Icon && !isLeft && <Icon size={22} />}
+      size={'md'}
       variant={'filled'}
     >
       {text || children}
