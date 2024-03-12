@@ -30,7 +30,6 @@ export const PriceChangeStep = () => {
         marks={PRICE_STEP_SLIDER_MARKS}
         mb={15}
         mt={10}
-        onChange={() => haptic.selectionChanged()}
         onChangeEnd={setEndValue}
         step={25}
         styles={{

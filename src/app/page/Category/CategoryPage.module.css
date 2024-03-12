@@ -64,6 +64,14 @@
   font-size: var(--mantine-font-size-lg);
   background-color: var(--tg-theme-background-color);
   border-radius: var(--mantine-radius-md);
+
+  &:active {
+    background-color: var(--tg-theme-accent-text-color);
+  }
+
+  &[aria-expanded='true'] {
+    background-color: var(--tg-theme-accent-text-color);
+  }
 }
 
 @media (hover: hover) {
